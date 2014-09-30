@@ -1,44 +1,82 @@
-#!/usr/bin/env python 
-# -*- coding: utf-8 -*- 
+ #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
-# Visualizador de dados da estação biométrica
-# 
-# Centro de Tecnologia Acadêmica - UFRGS
-# http://cta.if.ufrgs.br
+# Visualizador de Temperatura
 #
-# Licença: GPL v3
 
-
-from matplotlib import pyplot as plt
-import numpy as np
-import sys
-
-#Ordem de parametros : [arquivo], [real_time(-R)]
+from pylab import *
+import time, sys
 parametro = sys.argv[1:]
 
-#try:
-#         filename = sys.argv[1]
-#    except:
-#         print 'Necessário fornecer um parâmetro: nome do arquivo'
-#         sys.exit(1)
+ion()
+fisiologfile = open(parametro[0]+'.log','r')
 
+i = 0
+t = []
+h = []
 
-fisiologfile = open(parametro[0]+'.log', 'r')
+for linha in fisiologfile:
+	if linha[0] == '!':
+		frequencia = linha.strip('!')
+		periodo = 1.0/ frequencia
+	elif linha[0] != '#':
+		h.append(float(linha.split('\t')[1]))
+		t.append(i)
+		i = i + periodo
+	
+fisiologfile.close()
 
-x= []
-y= []
+fig = figure(1)
+sub = subplot(111)
 
-for line in fisiologfile:
-	line = line.strip()
-	if line[0] != "#":
-		aux = line.split('\t')	
-		x.append(aux[0][-5:-3])
-		y.append(aux[1])
+line = plot(t, h, 'r-')
 
-plt.plot(x,y)
+xlabel('Tempo(s)')
+ylabel('')
+title('Frequência Respiratória')
 
-plt.title("Plot exemplo")
-plt.xlabel("Tempo")
-plt.ylabel("Freq.")
+#Variáveis de controle
+intervalo = 5
+quantidade_dados = int(intervalo*frequencia(3/2))
+variacao = 0.02 #porcento  
+variacao_max = 0.20 #porcento
 
-plt.show()
+#Inicialização de variáveis
+x0 = 0
+
+while True:
+	try:
+		t0 = time.time()
+		
+		#Leitura do ultimo dado do arquivo (Problema se o arquivo não estiver sendo atualizado)
+		fisiologfile = open(parametro[0]+'.log','r')
+		s = fisiologfile.readlines()[-1].split('\t')[1]		
+		t.append(i)
+		h.append(s)
+		line[0].set_data(t,h)
+		x0 = i - intervalo
+		sub.set_xlim(x0,i)
+		
+		#Controle do foco da imagem do gráfico
+		yf=(1.0 + variacao_y)*(max(h[-quantidade_dados:]))
+		yi=(1.0 - variacao_y)*(min(h[-quantidade_dados:]))
+		valor_medio= sum(h[-quantidade_dados:])/quantidade_dados
+		if(yf > (1 + variacao + variacao_max)*valor_medio):
+			yf = (1 + variacao + variacao_max)*valor_medio
+		if(yi < (1 - variacao - variacao_max)*valor_medio):
+			yi = (1 - variacao - variacao_max)*valor_medio
+		sub.set_ylim(yi,yf)
+		
+		draw()	
+		i = i+periodo
+		if (periodo - (time.time()- t0))< 0:
+			print "Não é possível operar a essa frequência"
+			break 		
+		fisiologfile.close()
+		time.sleep(periodo - (time.time()- t0))
+  except KeyboardInterrupt:
+    break
+  except ValueError:
+	print "Não é possível operar a essa frequência (controlador)"
+	break
+	

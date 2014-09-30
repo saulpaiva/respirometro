@@ -5,26 +5,31 @@
 
 int sensorTemperature = 5;    
 float sensorValue = 0; 
-bool flag_test= 0;
 int frequency = 5;
 unsigned long time_0;
 float period;
-void setup() {
+
+void setup() 
+{
   Serial.begin(115200);
   period = 1.0/frequency;
 }
-void loop() {
+void loop() 
+{
   time_0=millis();
-  temperaturaNTC();
-  if((period*1000) -(millis()-time_0)<0){
-    Serial.println("Frequência muito alta para operação");   
-    break;
+  temperatura_NTC();
+  if((period*1000) -(millis()-time_0) < 0)
+  {
+    Serial.println("Erro1");   
   }
-  delay((period*1000) -(millis()-time_0));
+  else
+  {
+    delay((period*1000) -(millis()-time_0));
+  }
 }
 void temperatura_NTC()
 {
-  sensorValue = analogRead(sensorPin);   
+  sensorValue = analogRead(sensorTemperature);   
   Serial.println(sensorValue);
 }
 void pulso(){

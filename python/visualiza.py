@@ -1,26 +1,38 @@
- #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
 #
-# Visualizador de Temperatura
+# Estação biométrica CTA
 #
+# Programa para visualização dos dados
+# Este programa é utilizado com o programa biometrica.ino no qual a taxa de amostragem é definida no microcontrolador
+# 
+# Centro de Tecnologia Acadêmica - UFRGS
+# http://cta.if.ufrgs.br
+#
+# Licença: GPL v3
+# Ordem de argumentos : [arquivo_entrada]
+# Onde 
+# [arquivo_entrada]: arquivo que será visualizado
+
+# Exemplo: python visualiza.py coleta1.log
 
 from pylab import *
 import time, sys
 parametro = sys.argv[1:]
 
 ion()
-fisiologfile = open(parametro[0]+'.log','r')
+fisiologfile = open(parametro[0],'r')
 
 i = 0
 t = []
 h = []
 
 for linha in fisiologfile:
-	if linha[0] == '!':
-		frequencia = linha.strip('!')
+	if linha[0:5] == '#Freq':
+		frequencia = float(linha.replace('\n', '').split('\t')[1])
 		periodo = 1.0/ frequencia
 	elif linha[0] != '#':
-		h.append(float(linha.split('\t')[1]))
+		h.append(float(linha))
 		t.append(i)
 		i = i + periodo
 	
@@ -37,7 +49,7 @@ title('Frequência Respiratória')
 
 #Variáveis de controle
 intervalo = 5
-quantidade_dados = int(intervalo*frequencia(3/2))
+quantidade_dados = int(intervalo*frequencia*(3/2))
 variacao = 0.02 #porcento  
 variacao_max = 0.20 #porcento
 
@@ -49,8 +61,9 @@ while True:
 		t0 = time.time()
 		
 		#Leitura do ultimo dado do arquivo (Problema se o arquivo não estiver sendo atualizado)
-		fisiologfile = open(parametro[0]+'.log','r')
-		s = fisiologfile.readlines()[-1].split('\t')[1]		
+		fisiologfile = open(parametro[0],'r')
+		s = float(fisiologfile.readlines()[-1])	
+		fisiologfile.close()		
 		t.append(i)
 		h.append(s)
 		line[0].set_data(t,h)
@@ -58,8 +71,8 @@ while True:
 		sub.set_xlim(x0,i)
 		
 		#Controle do foco da imagem do gráfico
-		yf=(1.0 + variacao_y)*(max(h[-quantidade_dados:]))
-		yi=(1.0 - variacao_y)*(min(h[-quantidade_dados:]))
+		yf=(1.0 + variacao)*(max(h[-quantidade_dados:]))
+		yi=(1.0 - variacao)*(min(h[-quantidade_dados:]))
 		valor_medio= sum(h[-quantidade_dados:])/quantidade_dados
 		if(yf > (1 + variacao + variacao_max)*valor_medio):
 			yf = (1 + variacao + variacao_max)*valor_medio
@@ -69,14 +82,14 @@ while True:
 		
 		draw()	
 		i = i+periodo
+
 		if (periodo - (time.time()- t0))< 0:
 			print "Não é possível operar a essa frequência"
-			break 		
-		fisiologfile.close()
+			break 				
 		time.sleep(periodo - (time.time()- t0))
-  except KeyboardInterrupt:
-    break
-  except ValueError:
-	print "Não é possível operar a essa frequência (controlador)"
-	break
+	except KeyboardInterrupt:
+    		break
+	except ValueError:
+		print "Não é possível operar a essa frequência (controlador)"
+		break
 	

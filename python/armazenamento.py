@@ -34,8 +34,8 @@ now=datetime.datetime.now()
 fisiologfile.write(now.strftime("#Frequência\t"+argumento[3]+"\n"+"#Estação Biométrica\n"+"#Coleta de dados iniciado em: "+"%Y-%m-%d %H:%M:%S" +"\n"))
 
 #Variáveis de controle
-frequencia = argumento[3]
-periodo = 1.0/int(frequencia)
+frequencia = int(argumento[3])
+periodo = 1.0/frequencia
 
 while True:
 	t0 = time.time()
@@ -53,7 +53,7 @@ while True:
 		now = datetime.datetime.now()
  
 		# Arquivo de log
-		print now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],"\t", t,"\t"
+		print now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],"\t", t
 		fisiologfile = open(argumento[2],'a')
 		fisiologfile.write(str(t)+"\n")   
 		fisiologfile.close()

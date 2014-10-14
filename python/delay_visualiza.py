@@ -4,8 +4,7 @@
 # Estação biométrica CTA
 # Béuren Bechlin
 #
-# Programa para visualização dos dados
-# Este programa é utilizado com o programa biometrica.ino no qual a taxa de amostragem é definida no microcontrolador
+# Programa para determinar a máxima frequência de operação da visualização
 # 
 # Centro de Tecnologia Acadêmica - UFRGS
 # http://cta.if.ufrgs.br
@@ -21,8 +20,10 @@ from pylab import *
 import time, sys
 parametro = sys.argv[1:]
 
+t0 = time.time() ##
 ion()
 fisiologfile = open(parametro[0],'r')
+datafile = open('delay_visu.log','w') ##
 
 #Inicialização de variáveis
 contador = 0
@@ -66,12 +67,14 @@ intervalo = 10
 quantidade_dados = int(intervalo*frequencia*(1.5))
 variacao = 0.02
 variacao_max = 0.30
-frequencia_foco = int(frequencia*intervalo*(0.2))
-frequencia_limpa =  int(frequencia*intervalo*(50))
+frequencia_foco = 5
+frequencia_limpa = 10
 
 yf = (1.0 + variacao)*(max(y))
 yi = (1.0 - variacao)*(min(y))
-contador = len(y)
+contador = 0
+datafile.write('#Tempo de execução inicial (fora do laço): '+str((time.time()- t0)*1000)) ##
+print (time.time()- t0)*1000 ##
 while True:
 	try:
 		t0 = time.time()
@@ -113,7 +116,9 @@ while True:
 
 		if (periodo - (time.time()- t0))< 0:
 			print "Não é possível operar a essa frequência"
-			break 				
+			break 	
+			
+		datafile.write(str(contador)+"\t"+str((time.time()- t0)*1000)+"\n") ##
 		time.sleep(periodo - (time.time()- t0))
 	except KeyboardInterrupt:
     		break

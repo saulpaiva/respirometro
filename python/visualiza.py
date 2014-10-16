@@ -24,14 +24,14 @@ parametro = sys.argv[1:]
 ion()
 fisiologfile = open(parametro[0],'r')
 
-#Inicialização de variáveis
+# Inicialização de variáveis
 contador = 0
 x0 = 0
 i = 0
 x = []
 y = []
 
-#Dados para plot
+# Dados para plot
 fig = figure(1)
 sub = subplot(111)
 line = plot(x, y, 'r-')
@@ -43,7 +43,7 @@ for linha in fisiologfile:
 	if linha[0:5] == '#Freq':
 		frequencia = float(linha.replace('\n', '').split('\t')[1])
 		periodo = 1.0/ frequencia
-	elif linha[0] != '#' and linha[0:3] != '0.0':
+	elif linha[0] != '#':
 		y.append(float(linha))
 		x.append(i)
 		i = i + periodo
@@ -63,21 +63,22 @@ fisiologfile.close()
 # ----
 
 intervalo = 10
-quantidade_dados = int(intervalo*frequencia*(1.5))
+quantidade_dados = int(intervalo*frequencia*(1.1))
 variacao = 0.02
 variacao_max = 0.30
-frequencia_foco = int(frequencia*intervalo*(0.2))
+frequencia_foco = int(frequencia*intervalo*(0.1))
 frequencia_limpa =  int(frequencia*intervalo*(50))
 
 yf = (1.0 + variacao)*(max(y))
 yi = (1.0 - variacao)*(min(y))
 contador = len(y)
+
 while True:
 	try:
 		t0 = time.time()
 		contador = contador + 1;
 		
-		#Leitura do ultimo dado do arquivo, caso o arquivo não esteja sendo atualizado será sempre pego a última linha.
+		# Leitura do ultimo dado do arquivo, caso o arquivo não esteja sendo atualizado será sempre pego a última linha.
 		fisiologfile = open(parametro[0],'r')
 		s = float(fisiologfile.readlines()[-1])	
 		fisiologfile.close()		
@@ -86,7 +87,7 @@ while True:
 		line[0].set_data(x,y)
 		x0 = i - intervalo
 				
-		#Controle do foco da imagem do gráfico:
+		# Controle do foco da imagem do gráfico:
 		if (contador % frequencia_foco == 0) :
 			if(quantidade_dados > len(y)) :
 				yf = (1.0 + variacao)*(max(y[-len(y):]))
@@ -100,8 +101,8 @@ while True:
 				yf = (1 + (variacao + variacao_max))*valor_medio
 			if(yi < (1 - (variacao + variacao_max))*valor_medio):
 				yi = (1 - (variacao + variacao_max))*valor_medio
-
-		#Limpar a lista, já que dependendo do tempo de execução seu tamanho pode ser muito grande. 
+			
+		# Limpar a lista, já que dependendo do tempo de execução seu tamanho pode ser muito grande. 
 		if (contador % frequencia_limpa  == 0):
 			del x [0:-quantidade_dados]
 			del y [0:-quantidade_dados]
@@ -112,11 +113,9 @@ while True:
 		i = i + periodo
 
 		if (periodo - (time.time()- t0))< 0:
-			print "Não é possível operar a essa frequência"
+			print 'Não é possível operar a essa frequência : ', frequencia
 			break 				
 		time.sleep(periodo - (time.time()- t0))
 	except KeyboardInterrupt:
     		break
-	except ValueError:
-		print "Não é possível operar a essa frequência (controlador)"
-		break
+

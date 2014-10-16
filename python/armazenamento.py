@@ -10,57 +10,55 @@
 # http://cta.if.ufrgs.br
 #
 # Licença: GPL v3
-# Ordem de argumentos : [porta],[taxa_transmissão],[arquivo_saída],[frequência]
+# Ordem de argumentos : [porta],[taxa_transmissão],[arquivo_saída]
 # Onde 
 # [porta]: porta serial no qual o arduino está conectado
 # [taxa_transmissão]: velocidade de comunicação serial
 # [arquivo_saída]: nome do arquivo em que os dados serão salvos
-# [frequência]: frequência de coleta de dados definida no arduino
 
-# Exemplo: python armazenamento.py '/dev/ttyACM0' 115200 coleta1.log 5
-
-
+# Exemplo: python armazenamento.py '/dev/ttyACM0' 115200 coleta1.log 
 
 import sys, time, serial, datetime
 argumento = sys.argv[1:] #renomeando os argumentos 
 
-#Iniciando comunicação serial
+# Iniciando comunicação serial
 ser = serial.Serial(argumento[0], argumento[1])
-time.sleep(2)
+# Limpando buffer para retirar as medidas feitas antes de iniciar o software
+ser.setDTR(False)	# Desliga DTR
+time.sleep(0.005)  
+ser.flushInput()	# Limpa buffer de dados
+ser.setDTR(True)  	# Liga DTR novamente 
 
-#Arquivos de log
-fisiologfile = open(argumento[2],'w')
-now=datetime.datetime.now()
-fisiologfile.write(now.strftime("#Frequência\t"+argumento[3]+"\n"+"#Estação Biométrica\n"+"#Coleta de dados iniciado em: "+"%Y-%m-%d %H:%M:%S" +"\n"))
-
-#Variáveis de controle
-frequencia = int(argumento[3])
+# Variáveis de controle
+frequencia = int(ser.readline().replace('\r\n',''))
 periodo = 1.0/frequencia
 
+# Arquivos de log
+fisiologfile = open(argumento[2],'w')
+now=datetime.datetime.now()
+fisiologfile.write(now.strftime("#Frequência\t"+str(frequencia)+"\n"+"#Estação Biométrica\n"+"#Coleta de dados iniciado em: "+"%Y-%m-%d %H:%M:%S" +"\n"))
+
 while True:
-	t0 = time.time()
 	try:
     		# Temperatura
-    		t = float(ser.readline().replace('\r\n',''))
+    		t = ser.readline().replace('\r\n','')
+    		if t == 'Erro1':
+				print 'Frequência muito alta para o microcontrolador: ', frequencia, '. Finalizando processo.\n' 
   	except KeyboardInterrupt:
     		break
-	except ValueError:
-		print "Não é possível operar a essa frequência (controlador)"
-		break	
-
+	
 	try:
 		# Registra horário atual
 		now = datetime.datetime.now()
+		
+		# Mostrando dados na tela
+		print now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],"\t", t
  
 		# Arquivo de log
-		print now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],"\t", t
 		fisiologfile = open(argumento[2],'a')
 		fisiologfile.write(str(t)+"\n")   
 		fisiologfile.close()
-		if (periodo - (time.time()- t0))< 0:
-			print "Não é possível operar a essa frequência"
-			break 		
-		time.sleep(periodo - (time.time()- t0))
 	except KeyboardInterrupt:
     		break
+    		
 ser.close()

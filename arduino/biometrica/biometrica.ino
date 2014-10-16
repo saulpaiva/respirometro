@@ -13,6 +13,7 @@ void setup()
 {
   Serial.begin(115200);
   period = 1.0/frequency;
+  delay(50);
 }
 void loop() 
 {

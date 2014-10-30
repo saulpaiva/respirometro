@@ -84,8 +84,6 @@ while True:
 		fisiologfile.close()		
 		x.append(i)
 		y.append(s)
-		line[0].set_data(x,y)
-		x0 = i - intervalo
 				
 		# Controle do foco da imagem do gráfico:
 		if (contador % frequencia_foco == 0) :
@@ -106,12 +104,15 @@ while True:
 		if (contador % frequencia_limpa  == 0):
 			del x [0:-quantidade_dados]
 			del y [0:-quantidade_dados]
-					
+		
+		line[0].set_data(x,y)
+		x0 = i - intervalo			
 		sub.set_xlim(x0,i)
 		sub.set_ylim(yi,yf)
 		draw()	
 		i = i + periodo
 
+		
 		if (periodo - (time.time()- t0))< 0:
 			print 'Não é possível operar a essa frequência : ', frequencia
 			break 				

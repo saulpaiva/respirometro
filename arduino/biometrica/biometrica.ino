@@ -15,7 +15,7 @@
 #define TERM_PIN_1  A0
 #define TERM_PIN_2  A1
     
-int frequency = 5;
+int frequency = 20;
 unsigned long time_0;
 float period;
 

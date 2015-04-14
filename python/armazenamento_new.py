@@ -22,7 +22,7 @@
 	PADRÃO NOME DO ARQUIVO DE SAÍDA: coleta_[Nome]_[Sobrenome]_[obs].log
 		[obs] são observações caso sejam necessárias
 '''
-# Exemplo: python armazenamento.py '/dev/ttyACM0' 115200 coleta_Nome_Exemplo_1min.log 30
+# Exemplo: python armazenamento_new.py '/dev/ttyACM0' 115200 coleta_Nome_Exemplo_1min.log 30
 
 import sys, time, serial, datetime
 argumento = sys.argv[1:] #renomeando os argumentos
@@ -37,7 +37,7 @@ ser.setDTR(True)  # Liga DTR novamente
 
 # Variáveis de controle
 frequencia = int(ser.readline().replace('\r\n',''))
-
+periodo = 1.0/frequencia
 # Arquivos de log
 fisiologfile = open(argumento[2],'w')
 now=datetime.datetime.now()
@@ -49,7 +49,7 @@ time = int(argumento[3])*frequencia
 time_counter = 0;
 while (time_counter <= time or time == 0):
 	time_counter += 1
-	print time, time_counter
+	print time*periodo, time_counter*periodo
 	try:
 		option = ser.read()
 		# Respiração

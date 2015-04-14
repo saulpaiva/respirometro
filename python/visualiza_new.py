@@ -41,7 +41,7 @@ import numpy as np
 import Image
 import sys
 import matplotlib.pyplot as plt
-
+import math
 
 # Atribuindo as váriaveis com os valores de entrada
 parametro = sys.argv[1:]
@@ -98,15 +98,15 @@ date_time = 0
 # Importando dados do arquivo e encontrando média
 for linha in fisiologfile:
     if linha[0] != '#':
-    	if (i >= cont_ini and i <= cont_final):
+    	if (i >= cont_ini and i < cont_final):
             y1.append(int(linha.split('\t')[0]))
             y2.append(int(linha.split('\t')[1]))
             x1.append(i*T)
-            i += 1
+    	i += 1
     elif linha[0:7] == '#Coleta':
         date_time_d = linha.split(' ')[5]
         date_time_d = date_time_d.split('-')[2]+ '/' + date_time_d.split('-')[1]+ '/' + date_time_d.split('-')[0]
-        date_time_h = linha.split(' ')[6]
+        date_time_h = linha.replace('\n','').split(' ')[6]
 
 fisiologfile.close()
 
@@ -172,16 +172,17 @@ t_half = (t_final - t_inicial)/2
 
 x_half_fft = fftfreq(N_half, T)
 x_half_fft = fftshift(x_half_fft)
-x_half_fft = x_half_fft[N_half/2:N_half]
+x_half_fft = x_half_fft[math.floor(N_half/2):N_half]
 
-y1_half_1_fft = fft(y1_filt[0:N_half-1])
-y2_half_1_fft = fft(y2_filt[0:N_half-1])
+
+y1_half_1_fft = fft(y1_filt[0:N_half])
+y2_half_1_fft = fft(y2_filt[0:N_half])
 
 y1_half_1_fft = fftshift(y1_half_1_fft)
 y2_half_1_fft = fftshift(y2_half_1_fft)
 
-y1_half_1_fft = np.abs(y1_half_1_fft[N_half/2:N_half])
-y2_half_1_fft = np.abs(y2_half_1_fft[N_half/2:N_half])
+y1_half_1_fft = np.abs(y1_half_1_fft[math.floor(N_half/2):N_half])
+y2_half_1_fft = np.abs(y2_half_1_fft[math.floor(N_half/2):N_half])
 
 
 y1_half_2_fft = fft(y1_filt[N_half:N])
@@ -190,9 +191,10 @@ y2_half_2_fft = fft(y2_filt[N_half:N])
 y1_half_2_fft = fftshift(y1_half_2_fft)
 y2_half_2_fft = fftshift(y2_half_2_fft)
 
-y1_half_2_fft = np.abs(y1_half_2_fft[N_half/2:N_half])
-y2_half_2_fft = np.abs(y2_half_2_fft[N_half/2:N_half])
+y1_half_2_fft = np.abs(y1_half_2_fft[math.floor(N_half/2):N_half])
+y2_half_2_fft = np.abs(y2_half_2_fft[math.floor(N_half/2):N_half])
 
+# MATH.FLOOR para conter o 0
 # Determinando momento das distribuições:
 #   N através da frequência já que também depende da frequência, N = tempo da amostra*freq
 #       dessa forma as razões entre eles são constantes
@@ -279,7 +281,11 @@ fig.suptitle(u'Frequência Respiratória:\n',
         fontweight='bold')
 
 sub_plot1 = plt.subplot(3,1,1)
-plt.text(0, 0.91, u'Nome: %s \nData da coleta: %s        Horário da Coleta: %s \n' % (user_name, date_time_d, date_time_h ),
+plt.text(0, 1.1, u'Nome: %s                        Data da coleta: %s' % (user_name, date_time_d),
+        horizontalalignment='left',
+        fontsize=fontsize[3],
+        transform = sub_plot1.transAxes)
+plt.text(0, 1.01, u'Horário da Coleta: %s              Tempo analisado %s s à %s s' % (date_time_h, str(t_inicial), str(t_final)),
         horizontalalignment='left',
         fontsize=fontsize[3],
         transform = sub_plot1.transAxes)
@@ -319,7 +325,7 @@ sub_plot3.patch.set_visible(False)
 sub_plot3.axis('off')
 
 im = Image.open('logo.png')
-plt.figimage(im,2500, 200)
+plt.figimage(im,2250, 175)
 
 # Item Resultados:
 plt.text(0,0.9,u'Resultados: \n', fontsize=fontsize[0], fontweight='bold')
@@ -334,7 +340,7 @@ plt.text(0.38,0.58,u'Frequência       Período        Variância       Desvio',
 plt.text(0.42,0.52,u'(Hz)                (s)                                  Padrão', fontsize=fontsize[4], fontstyle = 'italic')
 
 plt.text(0,0.38,u'   Relativo ao intervalo: \n', fontsize=fontsize[4], fontweight='bold')
-plt.text(0.44,0.38,u'%.2f a %.2f                 %.2f a %.2f' % (t_inicial, t_half, t_half, t_final), fontsize=fontsize[4], fontweight='bold')
+plt.text(0.40,0.38,u'%.2f s a %.2f s            %.2f s a %.2f s' % (t_inicial, t_half, t_half, t_final), fontsize=fontsize[4], fontweight='bold')
 plt.text(0,0.32,u'          Narina direita:', fontsize=fontsize[4], fontweight='bold')
 plt.text(0.4,0.24,u'%.4f            %.3f            %1.3f          %.3f\n' % (first_moment_1_half_1, t_est_1_half_1, first_moment_1_half_2, t_est_1_half_2), fontsize=fontsize[4])
 plt.text(0,0.26,u'          Narina esquerda:', fontsize=fontsize[4], fontweight='bold')

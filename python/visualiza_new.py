@@ -53,9 +53,8 @@ n_filtro = int(parametro[3])
 qtd_filtro = int(parametro[4])
 freq_i = float(parametro[5])
 freq_f = float(parametro[6])
-png_name = 'Resp_'+log_file.split('_')[1]+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str(int(freq_i))+'_a_'+str(int(freq_f))+'.png'
+png_name = 'Resp_'+log_file.split('_')[1]+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str('%.2f' % freq_i)+'_a_'+str('%.2f' % freq_f)+'.png'
 user_name = parametro[0].replace('_', ' ').split(' ')[1] + ' ' + parametro[0].replace('_', ' ').split(' ')[2]
-# TROCAR!!!
 freq = int(fisiologfile.readline().split('\t')[1])
 
 
@@ -93,7 +92,6 @@ T = 1.0/freq
 dx = float(freq)/N
 
 i = 0
-date_time = 0
 
 # Importando dados do arquivo e encontrando média
 for linha in fisiologfile:
@@ -107,8 +105,10 @@ for linha in fisiologfile:
         date_time_d = linha.split(' ')[5]
         date_time_d = date_time_d.split('-')[2]+ '/' + date_time_d.split('-')[1]+ '/' + date_time_d.split('-')[0]
         date_time_h = linha.replace('\n','').split(' ')[6]
-
+if i < 
 fisiologfile.close()
+
+# Testando 
 
 # Média e varianca:
 med_y1 = sum(y1) / len(y1)
@@ -168,7 +168,7 @@ y2_fft_plot = np.abs(y2_fft_plot[N/2:N])
 
 # Transformada de fourier na metade de todo período:
 N_half = int(N/2)
-t_half = (t_final - t_inicial)/2
+t_half = float(t_final + t_inicial)/2
 
 x_half_fft = fftfreq(N_half, T)
 x_half_fft = fftshift(x_half_fft)
@@ -285,7 +285,7 @@ plt.text(0, 1.1, u'Nome: %s                        Data da coleta: %s' % (user_n
         horizontalalignment='left',
         fontsize=fontsize[3],
         transform = sub_plot1.transAxes)
-plt.text(0, 1.01, u'Horário da Coleta: %s              Tempo analisado %s s à %s s' % (date_time_h, str(t_inicial), str(t_final)),
+plt.text(0, 1.01, u'Horário da Coleta: %s               Tempo analisado %s s à %s s' % (date_time_h, str(t_inicial), str(t_final)),
         horizontalalignment='left',
         fontsize=fontsize[3],
         transform = sub_plot1.transAxes)

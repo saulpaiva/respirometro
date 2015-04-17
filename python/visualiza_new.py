@@ -39,9 +39,20 @@ from array import *
 from scipy.fftpack import fft, fftfreq, fftshift
 import numpy as np
 import Image
-import sys
+import sys, os
 import matplotlib.pyplot as plt
 import math
+
+# ERROS:
+# Testando se contém os argumentos	
+if len(sys.argv) < 7:
+    sys.stderr.write('ERRO: Argumentos insuficientes.\nEm caso de dúvidas leia o READ_ME.md.\n' )
+    sys.exit(1)
+# Arquivo de dados existe
+if not os.path.exists(sys.argv[1]):
+	sys.stderr.write('ERRO: Arquivo '+sys.argv[1]+' não encontrado!\nEm caso de dúvidas leia o READ_ME.md.\n')
+	sys.exit(1)
+
 
 # Atribuindo as váriaveis com os valores de entrada
 parametro = sys.argv[1:]
@@ -56,6 +67,7 @@ freq_f = float(parametro[6])
 png_name = 'Resp_'+log_file.split('_')[1]+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str('%.2f' % freq_i)+'_a_'+str('%.2f' % freq_f)+'.png'
 user_name = parametro[0].replace('_', ' ').split(' ')[1] + ' ' + parametro[0].replace('_', ' ').split(' ')[2]
 freq = int(fisiologfile.readline().split('\t')[1])
+
 
 
 # Inicialização de variáveis
@@ -84,6 +96,19 @@ sum_int_2 = 0
 sum_norm_1 = 0
 sum_norm_2 = 0
 
+# ERRO:
+# Ajustando para que os pontos iniciais não sejam maiores que os finais
+if t_inicial > t_final:
+	aux_1 = t_inicial
+	t_final = t_inicial
+	t_inicial = aux_1
+
+if freq_i > freq_f:
+	aux_1 = freq_i
+	freq_f = freq_i
+	freq_i = aux_1
+
+
 cont_ini = t_inicial*freq
 cont_final = t_final*freq
 
@@ -105,10 +130,22 @@ for linha in fisiologfile:
         date_time_d = linha.split(' ')[5]
         date_time_d = date_time_d.split('-')[2]+ '/' + date_time_d.split('-')[1]+ '/' + date_time_d.split('-')[0]
         date_time_h = linha.replace('\n','').split(' ')[6]
-if i < 
 fisiologfile.close()
-
-# Testando 
+# ERROS:
+# Tratando N maior que a quantidade de dados contidos no arquivo
+if (i >= cont_ini and i < cont_final) or (i < cont_ini and i < cont_final):
+	sys.stderr.write('ERRO: Intervalo de tempo %i s à %i s não está contido no arquivo.\nArquivo contém o intervalo de tempo: %i s.\nEm caso de dúvidas leia o READ_ME.md.\n' %(t_inicial, t_final, i*T))
+	sys.exit(1)
+# Filtro não identificado
+if (n_filtro != 1 and n_filtro != 2):
+	sys.stderr.write('ERRO: Filtro %i não identificado.\nEm caso de dúvidas leia o READ_ME.md.\n' % n_filtro)
+	sys.exit(1)
+if (freq_i > float(freq)/2 or freq_f > float(freq)/2):
+	sys.stderr.write('ERRO: Intervalo %.2f Hz à %.2f Hz de frequência não é possível de ser implementado.\nFrequência máxima possível para esse arquivo: %.2f Hz.\nEm caso de dúvidas leia o READ_ME.md.\n' %(freq_i, freq_f, float(freq)/2))
+	sys.exit(1)
+if (freq_f - freq_i < 0.1 ):
+	sys.stderr.write('ERRO: Não é possível ter essa resolução do domínio frequência.\nEm caso de dúvidas leia o READ_ME.md.\n')
+	sys.exit(1)
 
 # Média e varianca:
 med_y1 = sum(y1) / len(y1)

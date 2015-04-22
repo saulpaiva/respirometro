@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 import math
 
 # ERROS:
-# Testando se contém os argumentos	
+# Testando se contém os argumentos
 if len(sys.argv) < 7:
     sys.stderr.write('ERRO: Argumentos insuficientes.\nEm caso de dúvidas leia o READ_ME.md.\n' )
     sys.exit(1)
@@ -52,7 +52,6 @@ if len(sys.argv) < 7:
 if not os.path.exists(sys.argv[1]):
 	sys.stderr.write('ERRO: Arquivo '+sys.argv[1]+' não encontrado!\nEm caso de dúvidas leia o READ_ME.md.\n')
 	sys.exit(1)
-
 
 # Atribuindo as váriaveis com os valores de entrada
 parametro = sys.argv[1:]
@@ -100,17 +99,21 @@ sum_norm_2 = 0
 # Ajustando para que os pontos iniciais não sejam maiores que os finais
 if t_inicial > t_final:
 	aux_1 = t_inicial
-	t_final = t_inicial
-	t_inicial = aux_1
+	t_inicial = t_final
+	t_final = aux_1
 
 if freq_i > freq_f:
 	aux_1 = freq_i
-	freq_f = freq_i
-	freq_i = aux_1
+	freq_i = freq_f
+	freq_f = aux_1
 
 
 cont_ini = t_inicial*freq
 cont_final = t_final*freq
+
+if t_inicial < 0 or t_final < 0:
+	sys.stderr.write('ERRO: Não possível operar com intervalos negativos.\nEm caso de dúvidas leia o READ_ME.md.\n')
+	sys.exit(1)
 
 N = cont_final - cont_ini
 T = 1.0/freq
@@ -145,6 +148,9 @@ if (freq_i > float(freq)/2 or freq_f > float(freq)/2):
 	sys.exit(1)
 if (freq_f - freq_i < 0.1 ):
 	sys.stderr.write('ERRO: Não é possível ter essa resolução do domínio frequência.\nEm caso de dúvidas leia o READ_ME.md.\n')
+	sys.exit(1)
+if (freq_i < 0 or freq_f < 0):
+	sys.stderr.write('ERRO: Não possível operar com frequências negativas.\nLembrando que o espectro de frequência é uma função par, Y(f)= Y(-f).\nEm caso de dúvidas leia o READ_ME.md.\n')
 	sys.exit(1)
 
 # Média e varianca:

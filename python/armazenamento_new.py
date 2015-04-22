@@ -22,10 +22,25 @@
 	PADRÃO NOME DO ARQUIVO DE SAÍDA: coleta_[Nome]_[Sobrenome]_[obs].log
 		[obs] são observações caso sejam necessárias
 '''
-# Exemplo: python armazenamento_new.py '/dev/ttyACM0' 115200 coleta_Nome_Exemplo_1min.log 30
+# Exemplo: python armazenamento_new.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
 
-import sys, time, serial, datetime
+import sys, time, serial, datetime, os
 argumento = sys.argv[1:] #renomeando os argumentos
+baud_rate = [300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200]
+baud_correct = 0
+# Erros
+if not os.path.exists(argumento[0]):
+	sys.stderr.write('ERRO: Arduino não está conectado na porta '+argumento[0]+'!\nEm caso de dúvidas leia o READ_ME.md.\n')
+	sys.exit(1)
+if not os.access(argumento[0], os.R_OK):
+	sys.stderr.write('ERRO: A porta '+argumento[0]+' não pode ser lida por problemas de permissão!\nEm caso de dúvidas leia o READ_ME.md.\n')
+	sys.exit(1)
+for i in baud_rate:
+    if i == int(argumento[1]):
+        baud_correct = 1
+if not baud_correct:
+    sys.stderr.write('ERRO: A taxa de transmissão '+argumento[1]+' não pode ser usada pelo microcontrolador!\nEm caso de dúvidas leia o READ_ME.md.\n')
+    sys.exit(1)
 
 # Iniciando comunicação serial
 ser = serial.Serial(argumento[0], argumento[1])

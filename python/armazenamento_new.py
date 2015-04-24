@@ -29,6 +29,9 @@ argumento = sys.argv[1:] #renomeando os argumentos
 baud_rate = [300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200]
 baud_correct = 0
 # Erros
+if len(sys.argv) < 4:
+    sys.stderr.write('ERRO: Argumentos insuficientes.\nEm caso de dúvidas leia o READ_ME.md.\n' )
+    sys.exit(1)
 if not os.path.exists(argumento[0]):
 	sys.stderr.write('ERRO: Arduino não está conectado na porta '+argumento[0]+'!\nEm caso de dúvidas leia o READ_ME.md.\n')
 	sys.exit(1)
@@ -41,6 +44,7 @@ for i in baud_rate:
 if not baud_correct:
     sys.stderr.write('ERRO: A taxa de transmissão '+argumento[1]+' não pode ser usada pelo microcontrolador!\nEm caso de dúvidas leia o READ_ME.md.\n')
     sys.exit(1)
+
 
 # Iniciando comunicação serial
 ser = serial.Serial(argumento[0], argumento[1])

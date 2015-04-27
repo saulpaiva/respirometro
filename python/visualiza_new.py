@@ -45,7 +45,7 @@ import math
 
 # ERROS:
 # Testando se contém os argumentos
-if len(sys.argv) < 7:
+if len(sys.argv) < 8:
     sys.stderr.write('ERRO: Argumentos insuficientes.\nEm caso de dúvidas leia o READ_ME.md.\n' )
     sys.exit(1)
 # Arquivo de dados existe

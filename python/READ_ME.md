@@ -50,7 +50,9 @@ de ser multiplo par de 300. Exemplo 1200, 9600.
 
 #### Visualiza.py
 
-Programa que estima e emite um relatório sobre a frequência respiratória.
+Programa que estima e emite um relatório sobre a frequência respiratória. Lembrando
+que quanto menor o tempo amostrado maior a imprecisão do método. Além disso, o tempo
+mínimo de amostragem é 5s.
 
 Ordem de argumentos : [arquivo_entrada], [instante inicial], [instante final],
 [tipo do filtro], [repetições], [freq_inicial], [freq_final]

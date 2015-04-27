@@ -24,20 +24,24 @@
 '''
 # Exemplo: python armazenamento_new.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
 
-import sys, time, serial, datetime, os
+import sys, serial, datetime, os, time
 argumento = sys.argv[1:] #renomeando os argumentos
 baud_rate = [300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200]
 baud_correct = 0
+
 # Erros
-if len(sys.argv) < 4:
+if len(sys.argv) < 5:
     sys.stderr.write('ERRO: Argumentos insuficientes.\nEm caso de dúvidas leia o READ_ME.md.\n' )
     sys.exit(1)
+
 if not os.path.exists(argumento[0]):
 	sys.stderr.write('ERRO: Arduino não está conectado na porta '+argumento[0]+'!\nEm caso de dúvidas leia o READ_ME.md.\n')
 	sys.exit(1)
+
 if not os.access(argumento[0], os.R_OK):
 	sys.stderr.write('ERRO: A porta '+argumento[0]+' não pode ser lida por problemas de permissão!\nEm caso de dúvidas leia o READ_ME.md.\n')
 	sys.exit(1)
+
 for i in baud_rate:
     if i == int(argumento[1]):
         baud_correct = 1
@@ -45,12 +49,11 @@ if not baud_correct:
     sys.stderr.write('ERRO: A taxa de transmissão '+argumento[1]+' não pode ser usada pelo microcontrolador!\nEm caso de dúvidas leia o READ_ME.md.\n')
     sys.exit(1)
 
-
 # Iniciando comunicação serial
 ser = serial.Serial(argumento[0], argumento[1])
 # Limpando buffer para retirar as medidas feitas antes de iniciar o software
 ser.setDTR(False)	# Desliga DTR
-time.sleep(0.005)
+time.sleep(0.05)
 ser.flushInput()	# Limpa buffer de dados
 ser.setDTR(True)  # Liga DTR novamente
 
@@ -59,16 +62,17 @@ frequencia = int(ser.readline().replace('\r\n',''))
 periodo = 1.0/frequencia
 # Arquivos de log
 fisiologfile = open(argumento[2],'w')
-now=datetime.datetime.now()
+now = datetime.datetime.now()
 fisiologfile.write(now.strftime("#Frequência\t"+str(frequencia)+"\t(Hz)\n"+"#Estação Biométrica\n"+"#Coleta de dados iniciado em: "+"%Y-%m-%d %H:%M:%S" +"\n"+"#Protocolo usado: a primeira coluna é a medida do primeiro termistor e a segunda do segundo.\n"))
 fisiologfile.close()
 
-print "Data e hora da medida \t\tMedida 1\tMedida 2"
-time = int(argumento[3])*frequencia
+script_time = int(argumento[3])*frequencia
 time_counter = 0;
-while (time_counter <= time or time == 0):
+
+print "Data e hora da medida\t\tMedida 1\tMedida 2"
+while (time_counter <= script_time or script_time == 0):
 	time_counter += 1
-	print time*periodo, time_counter*periodo
+	print str(script_time*periodo) + ' s', str(time_counter*periodo) + ' s'
 	try:
 		option = ser.read()
 		# Respiração

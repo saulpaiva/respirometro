@@ -1,17 +1,22 @@
 # Estação Biométrica
 
-Centro de Tecnologia Acadêmica - UFRGS
+`Centro de Tecnologia Acadêmica - UFRGS`
 http://cta.if.ufrgs.br
 
-Licença: GPL v3
-Autor: Béuren F. Bechlin
+![Alt text](python/logo.png)
+
+`Licença: GPL v3`
+
+`Autor: Béuren F. Bechlin`
 
 ## Documentação de uso
 
 ### Arduino
 
-Inicialmente é necessário fazer upload do sketch biometrica.ino para seu micro-
+ Inicialmente é necessário fazer upload do sketch biometrica.ino para seu micro-
 controlador arduino.
+
+---
 
 ### Python
 
@@ -27,6 +32,8 @@ alguns módulos de python são necessários:
 * python-Image
 * python-time
 * python-os
+
+---
 
 #### Armazenamento.py
 
@@ -48,6 +55,8 @@ PADRÃO NOME DO ARQUIVO DE SAÍDA: coleta_[Nome]_[Sobrenome]_[obs].log
 Lembrando também que a taxa de transmissão(Baud Rate) da comunicação serial tem
 de ser multiplo par de 300. Exemplo 1200, 9600.
 
+---
+
 #### Visualiza.py
 
 Programa que estima e emite um relatório sobre a frequência respiratória. Lembrando
@@ -59,21 +68,21 @@ Ordem de argumentos : [arquivo_entrada], [instante inicial], [instante final],
 
 Onde:
 
--Evidenciando arquivo onde estão os dados a serem anilizado/exibidos:
-1. arquivo_entrada: arquivo que será visualizado/analisado.
+1. Evidenciando arquivo onde estão os dados a serem anilizado/exibidos:
+	1. arquivo_entrada: arquivo que será visualizado/analisado.
 
--Determinando em que ponto da amostra quer ser analizado:
-2. instante inicial(s): instante para iniciar a visualização/analise.
-3. instante final(s): instante para finalizar a visualização/analise.
+2. Determinando em que ponto da amostra quer ser analizado:
+	1. instante inicial(s): instante para iniciar a visualização/analise.
+	2. instante final(s): instante para finalizar a visualização/analise.
 
--Escolhendo filtro apropriado:
-4. tipo do filtro: escolher o filtro a ser utilizado no processo. (1 ou 2)
-5. repetições: definir a quantidade de vezes que o filtro será utilizado.
+3. Escolhendo filtro apropriado:
+	1. tipo do filtro: escolher o filtro a ser utilizado no processo. (1 ou 2)
+	2. repetições: definir a quantidade de vezes que o filtro será utilizado.
 
--Definindo o espectro de frequência a se uso:
-6. freq_inicial(Hz): definir a frequência inicial positiva que será usada, isso
+4. Definindo o espectro de frequência a se uso:
+	1. freq_inicial(Hz): definir a frequência inicial positiva que será usada, isso
 influenciará na precisão do resultado para o método.
-7. freq_final(Hz): definir a frequência final positiva que será usada, lembrando
+	2. freq_final(Hz): definir a frequência final positiva que será usada, lembrando
 que pela definição de transformada de fourier o domínio do espectro de frequência
 não será maior que a frequência de obtenção desses dados divido por 2, ou seja,
 a as frequências definidas aqui devem estar no intervalo [0;freq/2].

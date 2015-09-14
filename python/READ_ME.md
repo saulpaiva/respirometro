@@ -27,12 +27,11 @@ alguns módulos de python são necessários:
 * python-scipy
 * python-tk (tkInter)
 * python-matplotlib
-* python-sys
 * python-serial
-* python-Image
-* python-time
-* python-os
 
+```
+sudo apt-get install python-scipy python-tk python-matplotlib python-serial 
+```
 ---
 
 #### Armazenamento.py

@@ -16,6 +16,8 @@ O projeto visa criar um equipamento open source que procura inferir a frequênci
 respirátoria de um indíviduo de forma não invasiva, dimunuindo incômodo como
 também possibilitando maiores formas. 
 
+---
+
 ## Documentação de uso
 
 ### Arduino
@@ -37,7 +39,6 @@ alguns módulos de python são necessários:
 ```
 sudo apt-get install python-scipy python-tk python-matplotlib python-serial 
 ```
----
 
 #### Armazenamento.py
 
@@ -58,8 +59,6 @@ PADRÃO NOME DO ARQUIVO DE SAÍDA: coleta_[Nome]_[Sobrenome]_[obs].log
 
 Lembrando também que a taxa de transmissão(Baud Rate) da comunicação serial tem
 de ser multiplo par de 300. Exemplo 1200, 9600.
-
----
 
 #### Visualiza.py
 

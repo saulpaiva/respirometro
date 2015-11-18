@@ -1,13 +1,20 @@
-# Estação Biométrica
+# **Respirômetro**
 
-`Centro de Tecnologia Acadêmica - UFRGS`
-http://cta.if.ufrgs.br
+[Centro de Tecnologia Acadêmica - UFRGS](http://cta.if.ufrgs.br)
 
 ![Alt text](python/logo.png)
 
-`Licença: GPL v3`
+**Autor:** Béuren F. Bechlin
 
-`Autor: Béuren F. Bechlin`
+**Licença:** GPL v3
+
+---
+
+## Descrição do projeto
+
+O projeto visa criar um equipamento open source que procura inferir a frequência
+respirátoria de um indíviduo de forma não invasiva, dimunuindo incômodo como
+também possibilitando maiores formas. 
 
 ## Documentação de uso
 
@@ -15,8 +22,6 @@ http://cta.if.ufrgs.br
 
  Inicialmente é necessário fazer upload do sketch biometrica.ino para seu micro-
 controlador arduino.
-
----
 
 ### Python
 
@@ -85,3 +90,7 @@ influenciará na precisão do resultado para o método.
 que pela definição de transformada de fourier o domínio do espectro de frequência
 não será maior que a frequência de obtenção desses dados divido por 2, ou seja,
 a as frequências definidas aqui devem estar no intervalo [0;freq/2].
+
+--- 
+Para demais informações e documentação completa visite
+[CTA - RESPIRÔMETRO](http://cta.if.ufrgs.br/projects/fisiolog/wiki/Respir%C3%B4metro)

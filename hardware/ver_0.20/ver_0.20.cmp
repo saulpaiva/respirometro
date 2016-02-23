@@ -1,0 +1,213 @@
+Cmp-Mod V01 Created by Cvpcb (after 2015-may-01 BZR unknown)-product   date = Sex 18 Dez 2015 18:37:14 BRST
+
+BeginCmp
+TimeStamp = /560EC127;
+Reference = C1;
+ValeurCmp = C1;
+IdModule  = Discret:C2V8;
+EndCmp
+
+BeginCmp
+TimeStamp = /560EC094;
+Reference = C2;
+ValeurCmp = C1;
+IdModule  = Discret:C2V8;
+EndCmp
+
+BeginCmp
+TimeStamp = /566F09FD;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LEDs:LED-5MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /566F0AF8;
+Reference = D2;
+ValeurCmp = LED;
+IdModule  = LEDs:LED-5MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /566F0B44;
+Reference = D3;
+ValeurCmp = LED;
+IdModule  = LEDs:LED-5MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /567048FD;
+Reference = J1;
+ValeurCmp = Arduino_Header;
+IdModule  = w_conn_misc:arduino_header;
+EndCmp
+
+BeginCmp
+TimeStamp = /5609460D;
+Reference = P1;
+ValeurCmp = CONN_01X04;
+IdModule  = Socket_Strips:Socket_Strip_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5670B9DD;
+Reference = P2;
+ValeurCmp = LM358-P;
+IdModule  = Housings_DIP:DIP-8_W7.62mm_LongPads;
+EndCmp
+
+BeginCmp
+TimeStamp = /56213F08;
+Reference = P3;
+ValeurCmp = CONN_02X08;
+IdModule  = Socket_Strips:Socket_Strip_Straight_2x08;
+EndCmp
+
+BeginCmp
+TimeStamp = /56093E5D;
+Reference = R1;
+ValeurCmp = R1;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56093FE2;
+Reference = R2;
+ValeurCmp = R1;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56096B7A;
+Reference = R3;
+ValeurCmp = R2;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56096044;
+Reference = R4;
+ValeurCmp = R2;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5609404B;
+Reference = R5;
+ValeurCmp = R1;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /560EC441;
+Reference = R6;
+ValeurCmp = R4;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56096C42;
+Reference = R7;
+ValeurCmp = R3;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56096BE3;
+Reference = R8;
+ValeurCmp = R3;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56097033;
+Reference = R9;
+ValeurCmp = R2;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56094E14;
+Reference = R10;
+ValeurCmp = R1;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56094E1A;
+Reference = R11;
+ValeurCmp = R1;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56097039;
+Reference = R12;
+ValeurCmp = R3;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /560EC3C6;
+Reference = R13;
+ValeurCmp = R4;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56094E20;
+Reference = R14;
+ValeurCmp = R1;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5609703F;
+Reference = R15;
+ValeurCmp = R3;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5609702D;
+Reference = R16;
+ValeurCmp = R2;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /566F1701;
+Reference = R17;
+ValeurCmp = R7;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /566F17C0;
+Reference = R18;
+ValeurCmp = R7;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /566F1810;
+Reference = R19;
+ValeurCmp = R7;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /567095F7;
+Reference = SW1;
+ValeurCmp = SW_PUSH;
+IdModule  = Buttons_Switches_ThroughHole:SW_PUSH_SMALL;
+EndCmp
+
+BeginCmp
+TimeStamp = /567094EE;
+Reference = SW2;
+ValeurCmp = SW_PUSH;
+IdModule  = Buttons_Switches_ThroughHole:SW_PUSH_SMALL;
+EndCmp
+
+EndListe

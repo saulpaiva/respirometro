@@ -1,0 +1,59 @@
+Cmp-Mod V01 Created by Cvpcb (2014-11-09 BZR 5259)-product   date = Ter 07 Abr 2015 16:27:31 BRT
+
+BeginCmp
+TimeStamp = /55242BCE;
+Reference = C1;
+ValeurCmp = 1uF;
+IdModule  = Capacitors_ThroughHole:C_Radial_D5_L11_P2.5;
+EndCmp
+
+BeginCmp
+TimeStamp = /55242C1F;
+Reference = C2;
+ValeurCmp = 1uF;
+IdModule  = Capacitors_ThroughHole:C_Radial_D5_L11_P2.5;
+EndCmp
+
+BeginCmp
+TimeStamp = /552426E8;
+Reference = P1;
+ValeurCmp = CONN_01X08;
+IdModule  = Barra de pinos:PINHEAD1-6;
+EndCmp
+
+BeginCmp
+TimeStamp = /55242552;
+Reference = P2;
+ValeurCmp = CONN_01X02;
+IdModule  = Connect:PINHEAD1-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /552429E0;
+Reference = P3;
+ValeurCmp = CONN_01X02;
+IdModule  = Connect:PINHEAD1-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /55242941;
+Reference = P4;
+ValeurCmp = CONN_01X02;
+IdModule  = Connect:PINHEAD1-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /55242837;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5524289C;
+Reference = R2;
+ValeurCmp = 10K;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM15mm;
+EndCmp
+
+EndListe

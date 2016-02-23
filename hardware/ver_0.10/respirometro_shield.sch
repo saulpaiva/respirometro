@@ -1,0 +1,234 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L CONN_01X02 P2
+U 1 1 55242552
+P 4400 4050
+F 0 "P2" H 4400 4200 50  0000 C CNN
+F 1 "CONN_01X02" V 4500 4050 50  0000 C CNN
+F 2 "Connect:PINHEAD1-2" H 4400 4050 60  0001 C CNN
+F 3 "" H 4400 4050 60  0000 C CNN
+	1    4400 4050
+	-1   0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR01
+U 1 1 552425C5
+P 4750 3250
+F 0 "#PWR01" H 4750 3340 20  0001 C CNN
+F 1 "+5V" H 4750 3340 30  0000 C CNN
+F 2 "" H 4750 3250 60  0000 C CNN
+F 3 "" H 4750 3250 60  0000 C CNN
+	1    4750 3250
+	0    1    1    0   
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 552425D9
+P 4800 3350
+F 0 "#PWR02" H 4800 3350 30  0001 C CNN
+F 1 "GND" H 4800 3280 30  0001 C CNN
+F 2 "" H 4800 3350 60  0000 C CNN
+F 3 "" H 4800 3350 60  0000 C CNN
+	1    4800 3350
+	0    -1   -1   0   
+$EndComp
+Text GLabel 4750 4000 2    60   Input ~ 0
+A0
+Text GLabel 4750 4150 2    60   Input ~ 0
+A1
+Wire Wire Line
+	4600 4000 4750 4000
+Wire Wire Line
+	4600 4100 4650 4100
+Wire Wire Line
+	4650 4100 4650 4150
+Wire Wire Line
+	4650 4150 4750 4150
+Wire Wire Line
+	4600 3250 4750 3250
+Wire Wire Line
+	4600 3350 4800 3350
+$Comp
+L CONN_01X08 P1
+U 1 1 552426E8
+P 4400 3200
+F 0 "P1" H 4400 3650 50  0000 C CNN
+F 1 "CONN_01X08" V 4500 3200 50  0000 C CNN
+F 2 "Barra de pinos:PINHEAD1-6" H 4400 3200 60  0001 C CNN
+F 3 "" H 4400 3200 60  0000 C CNN
+	1    4400 3200
+	-1   0    0    -1  
+$EndComp
+$Comp
+L R R1
+U 1 1 55242837
+P 6300 2950
+F 0 "R1" V 6380 2950 40  0000 C CNN
+F 1 "10K" V 6307 2951 40  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 6230 2950 30  0001 C CNN
+F 3 "" H 6300 2950 30  0000 C CNN
+	1    6300 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R2
+U 1 1 5524289C
+P 7450 2950
+F 0 "R2" V 7530 2950 40  0000 C CNN
+F 1 "10K" V 7457 2951 40  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM15mm" V 7380 2950 30  0001 C CNN
+F 3 "" H 7450 2950 30  0000 C CNN
+	1    7450 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X02 P4
+U 1 1 55242941
+P 7250 3450
+F 0 "P4" H 7250 3600 50  0000 C CNN
+F 1 "CONN_01X02" V 7350 3450 50  0000 C CNN
+F 2 "Connect:PINHEAD1-2" H 7250 3450 60  0001 C CNN
+F 3 "" H 7250 3450 60  0000 C CNN
+	1    7250 3450
+	-1   0    0    -1  
+$EndComp
+$Comp
+L CONN_01X02 P3
+U 1 1 552429E0
+P 6500 3450
+F 0 "P3" H 6500 3600 50  0000 C CNN
+F 1 "CONN_01X02" V 6600 3450 50  0000 C CNN
+F 2 "Connect:PINHEAD1-2" H 6500 3450 60  0001 C CNN
+F 3 "" H 6500 3450 60  0000 C CNN
+	1    6500 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP2 C1
+U 1 1 55242BCE
+P 5900 3450
+F 0 "C1" H 5900 3550 40  0000 L CNN
+F 1 "1uF" H 5906 3365 40  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Radial_D5_L11_P2.5" H 5938 3300 30  0001 C CNN
+F 3 "" H 5900 3450 60  0000 C CNN
+	1    5900 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP2 C2
+U 1 1 55242C1F
+P 7850 3450
+F 0 "C2" H 7850 3550 40  0000 L CNN
+F 1 "1uF" H 7856 3365 40  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Radial_D5_L11_P2.5" H 7888 3300 30  0001 C CNN
+F 3 "" H 7850 3450 60  0000 C CNN
+	1    7850 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR03
+U 1 1 55242D04
+P 6850 2600
+F 0 "#PWR03" H 6850 2690 20  0001 C CNN
+F 1 "+5V" H 6850 2690 30  0000 C CNN
+F 2 "" H 6850 2600 60  0000 C CNN
+F 3 "" H 6850 2600 60  0000 C CNN
+	1    6850 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6300 2700 7450 2700
+Wire Wire Line
+	6850 2600 6850 2700
+Connection ~ 6850 2700
+Wire Wire Line
+	6300 3200 6300 3400
+Wire Wire Line
+	5900 3250 6300 3250
+Connection ~ 6300 3250
+Wire Wire Line
+	5900 3650 6300 3650
+Wire Wire Line
+	6300 3500 6300 3800
+Wire Wire Line
+	7450 3200 7450 3400
+Wire Wire Line
+	7850 3250 7450 3250
+Connection ~ 7450 3250
+Wire Wire Line
+	7850 3650 7450 3650
+Wire Wire Line
+	7450 3800 7450 3500
+$Comp
+L GND #PWR04
+U 1 1 55242EEB
+P 6850 4000
+F 0 "#PWR04" H 6850 4000 30  0001 C CNN
+F 1 "GND" H 6850 3930 30  0001 C CNN
+F 2 "" H 6850 4000 60  0000 C CNN
+F 3 "" H 6850 4000 60  0000 C CNN
+	1    6850 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 4000 6850 3800
+Wire Wire Line
+	6300 3800 7450 3800
+Connection ~ 6300 3650
+Connection ~ 7450 3650
+Connection ~ 6850 3800
+Text GLabel 6050 3100 1    60   Input ~ 0
+A0
+Text GLabel 7750 3100 1    60   Input ~ 0
+A1
+Wire Wire Line
+	6050 3100 6050 3250
+Connection ~ 6050 3250
+Wire Wire Line
+	7750 3100 7750 3250
+Connection ~ 7750 3250
+$EndSCHEMATC

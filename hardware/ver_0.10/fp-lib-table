@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "Barra de pinos")(type KiCad)(uri /home/labfis/OpenWorkbenchDev/Placas/respirometro_shield.pretty)(options "")(descr ""))
+)

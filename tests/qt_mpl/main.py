@@ -44,14 +44,66 @@ class MyWindow(qt.QWidget):
         self.initUI()
 
     def initUI(self):
+        # Plot Area
         self.mpl_canvas = MyMplCanvas()
         self.mpl_toolbar = NavigationToolbar2QTAgg(self.mpl_canvas, self)
 
-        layout = qt.QVBoxLayout()
-        layout.addWidget(self.mpl_canvas)
-        layout.addWidget(self.mpl_toolbar)
-        self.setLayout(layout)
+        mpl_layout = qt.QVBoxLayout()
+        mpl_layout.addWidget(self.mpl_canvas)
+        mpl_layout.addWidget(self.mpl_toolbar)
 
+        # Config Area
+        config_area = qt.QWidget()
+        config_area.setFixedWidth(200)
+
+        config_toolbar_grid = qt.QGridLayout()
+        config_toolbar_grid.setSpacing(10)
+
+        equation_label = qt.QLabel('V*[R1/(R1+R2) - RX/(R1+RX)]')
+
+        r1_label = qt.QLabel('R1:')
+        r1_edit = qt.QLineEdit()
+
+        r2_label = qt.QLabel('R2:')
+        r2_edit = qt.QLineEdit()
+
+        rx_label = qt.QLabel('RX:')
+        rx_edit = qt.QLineEdit()
+
+        min_label = qt.QLabel('Min')
+        min_edit = qt.QLineEdit()
+        max_label = qt.QLabel('Max')
+        max_edit = qt.QLineEdit()
+
+        volt_label = qt.QLabel('V:')
+        volt_edit = qt.QLineEdit()
+
+        generate_btt = qt.QPushButton('Generate')
+
+        config_toolbar_grid.addWidget(equation_label, 0, 0, 1, 2)
+        config_toolbar_grid.addWidget(r1_label, 1, 0)
+        config_toolbar_grid.addWidget(r1_edit, 1, 1)
+        config_toolbar_grid.addWidget(r2_label, 2, 0)
+        config_toolbar_grid.addWidget(r2_edit, 2, 1)
+        config_toolbar_grid.addWidget(rx_label, 3, 0, 1, 2)
+        config_toolbar_grid.addWidget(min_label, 4, 0)
+        config_toolbar_grid.addWidget(min_edit, 4, 1)
+        config_toolbar_grid.addWidget(max_label, 5, 0)
+        config_toolbar_grid.addWidget(max_edit, 5, 1)
+        config_toolbar_grid.addWidget(volt_label, 6, 0)
+        config_toolbar_grid.addWidget(volt_edit, 6, 1)
+        
+        config_layout = qt.QVBoxLayout()
+        config_layout.addLayout(config_toolbar_grid)
+        config_layout.addStretch()
+        config_layout.addWidget(generate_btt)
+
+        # Main Area
+        main_layout = qt.QGridLayout()
+        main_layout.addLayout(mpl_layout, 0, 0, 1, 2)
+        main_layout.addLayout(config_layout, 0, 2, 1, 1)
+        self.setLayout(main_layout)
+        
     def keyPressEvent(self, event):
         super().keyPressEvent(event)
         if event.key() == qt.Qt.Key_Escape:

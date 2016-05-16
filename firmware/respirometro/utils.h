@@ -18,6 +18,7 @@ class Polling{
         bool test();
         void executed();
         void setPeriod(int);
+        int getPeriod();
 };
 
 class Interface{
@@ -33,6 +34,7 @@ class Interface{
         void setState();
         void setPeriod(int period);
         void run();
+        int getPeriod();
         
 };
 

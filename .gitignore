@@ -1,2 +1,5 @@
 .build
 sources/python/
+sources/*.log
+sources/*.logbin
+

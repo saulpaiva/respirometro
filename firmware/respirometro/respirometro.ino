@@ -36,7 +36,8 @@ sobre a licença GPL v3, como também os arquivos:
 /* Criando estruturas de dados para definir como será enviado os 
     dados de comunicação*/
 struct{
-    short int controlFlag = 0xAAAA; 
+    byte controlFlag01 = 0xAA;
+    byte controlFlag02 = 0xAA; 
     short int frequency = FREQUENCY;;
 }headerStruct;
 
@@ -54,12 +55,7 @@ Interface interface(&measures, 1000.0/FREQUENCY);
 void setup(){
     /* Iniciando comunicação serial*/
     Serial.begin(115200);
-    while(!Serial){
-    }
-
-    delay(50);
     commHeader.send();
-    delay(50);    
 }
 
 void loop(){

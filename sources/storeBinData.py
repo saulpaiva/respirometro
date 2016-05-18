@@ -25,9 +25,9 @@
 '''
 
 STRUCT_DATA = 'h'
-STRUCT_HEADER = 'hh'
+STRUCT_HEADER = 'Hh'
 
-# Exemplo: python armazenamento.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
+# Exemplo: python storeBinData.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
 
 import sys, serial, datetime, os, time, struct
 
@@ -58,13 +58,7 @@ def validateInput():
 
 def initSerial(port, baud):
     # Iniciando comunicação serial
-    ser = serial.Serial(port, baudrate = baud,
-                bytesize = serial.EIGHTBITS,
-                parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE,
-                timeout=None,
-                xonxoff=0,
-                rtscts=0)  
+    ser = serial.Serial(port, baud)  
     # Limpando buffer para retirar as medidas feitas antes de iniciar o software      
     ser.dtr = False # Desliga DTR 
     time.sleep(1)
@@ -78,44 +72,58 @@ def progressBar(percent, lenght):
         DOC dos ANSII caracters:
             http://ascii-table.com/ansi-escape-sequences.php
     '''
-    highlight = " "*int((lenght-2)*percent/100)
+    highlight = " "*int((lenght-2)*percent*1.0/100)
     notHighlight = " "*(lenght-2- len(highlight))
-    print("\033[{}D\t|\033[1;42m{}\033[0;0m{}|  {}%".format(lenght+20, highlight,
-        notHighlight, percent)) 
+    printString = "\t"+"\033[47m"+" "+"\033[42m"+"{}".format(highlight)+ \
+                    "\033[0;0m"+"{}".format(notHighlight)+ "\033[47m"+" "\
+                    "\033[0;32m"+"\t{}%".format(percent)+"\033[0;0m" 
+    print(printString, end='\r') 
 
 def main(args):
     
-    serial = initSerial(args['SerialPort'], args['BaudRate'])
-    # Recebendo HEADER de controle
-    print("Lendo cabeçalho de controle...")
     while True:
         try:
-            dataLen = int(struct.unpack('B', serial.read(1))[0])
-            rawData = serial.read(dataLen)    
+            comm = initSerial(args['SerialPort'], args['BaudRate'])
+            # Recebendo HEADER de controle
+            print("Lendo cabeçalho de controle...")
+            dataLen = int(struct.unpack('B', comm.read(1))[0])
+            rawData = comm.read(dataLen)    
             flagControl, freq = struct.unpack(STRUCT_HEADER, rawData)
-            if flagControl == -21846: # 0xAAAA
+            # Protocolo de comunicação usado envia os bytes 0xAA e 0xAA para 
+            #   indicar que o HEADER está sendo enviado
+            if flagControl == 0xAAAA: 
                 break
             print("Leitura falhou. Reiniciando.")
-        except:
-            print("Leitura falhou. Reiniciando.")
+        except KeyboardInterrupt:
+            sys.exit()
+        except struct.error:
+            print("Problemas com comunicação. Por favor reenvie o firmware para\
+                    a placa")
+            sys.exit()
         
     print("Frequência de operação é de {} Hz.".format(freq))
     scriptTime = int(freq*args['ExecTime'])
+
     dataFile = open(args['FileName'],'w')
     dataFileBin = open(args['FileName']+'bin','wb')
-    dataFile.write(str(freq)+"\n")
-    dataFileBin.write(struct.pack('h',freq)) 
 
+    dataFile.write("# ----CTA||IF||UFRGS---- RESPIRÔMETRO LOGGER\n")
+    dataFile.write("# Frequencia de operação: "+str(freq)+"\n")
+    dataFileBin.write(struct.pack('h',freq)) 
+    # Registra horário atual
+    now = datetime.datetime.now()
+    dataFile.write("# Data do início da coleta: " + \
+            now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]+"\n")
+    dataFile.write("# Tempo estimado de coleta: {}s\n".format(args['ExecTime'])) 
     timeCounter = 0
     print("Iniciando aquisição de dados.")
     while (timeCounter <= scriptTime or scriptTime == 0):
         timeCounter += 1
-        if not(timeCounter % int(scriptTime/50)):
-           progressBar(int(timeCounter/scriptTime*100), 40)
-           print("\033[2A")
+        if not(timeCounter % int(scriptTime/100)):
+           progressBar(int(timeCounter*1.0/scriptTime*100), 40)
         try:
-            dataLen = int(struct.unpack('B',serial.read(1))[0])
-            rawData =  serial.read(dataLen)
+            dataLen = int(struct.unpack('B', comm.read(1))[0])
+            rawData =  comm.read(dataLen)
             data = struct.unpack(STRUCT_DATA, rawData)
             # Arquivo de log
             dataFile = open(args['FileName'],'a')
@@ -126,10 +134,15 @@ def main(args):
             dataFileBin.close()
 
         except KeyboardInterrupt:
-            break
+            print("\nTecla de escape prescionada. Abortando")
+            sys.exit()
+        except serial.serialutil.SerialException:
+            print("\nComunicação serial foi interrompida. Abortando")
+            sys.exit()
+        
 
-    serial.close()    
-    print("\033[1BOperação finalizada com sucesso.")
+    comm.close()
+    print("\nOperação finalizada com sucesso.")
     
 if __name__== '__main__':
     args = validateInput()

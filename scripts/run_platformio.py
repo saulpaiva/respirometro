@@ -15,9 +15,11 @@ def get_plataformio_serial_ports():
 
     '''
     serial_raw = shexec("platformio serialports list").splitlines()
-    serial_ports = [serial_raw[i-1] 
+    if serial_raw == []:
+        return [("ERRO", "ERRO: nenhuma porta serial encontrada")]
+    else:
+        serial_ports = [serial_raw[i-1] 
             for i,x in enumerate(serial_raw) if '----' in x]
-    
     return [(x,x) for x in serial_ports]
 
 
@@ -69,15 +71,17 @@ def exec_dialog_select_board():
 def platformio_setup(source_dir, build_dir='.build'):
     board_name = exec_dialog_select_board()
     serial_port = exec_dialog_select_serial_port()
-    os.system("""
-        rm -rf {build_dir} &&
-        mkdir -p {build_dir} &&
-        cd {build_dir} &&
-        yes | platformio init --board {board_name} &&
-        cp -r ../{source_dir}/* src/. &&
-        platformio run -t upload --upload-port {serial_port}
-        """.format(**locals()).strip())
-
+    if serial_port != "ERRO":
+        os.system("""
+            rm -rf {build_dir} &&
+            mkdir -p {build_dir} &&
+            cd {build_dir} &&
+            yes | platformio init --board {board_name} &&
+            cp -r ../{source_dir}/* src/. &&
+            platformio run -t upload --upload-port {serial_port}
+            """.format(**locals()).strip())
+    else:
+        os.system("clear")
 
 platformio_setup(source_dir=SOURCE_DIR)
 

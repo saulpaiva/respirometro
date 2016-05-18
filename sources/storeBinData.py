@@ -24,7 +24,7 @@
 		[obs] são observações caso sejam necessárias
 '''
 
-STRUCT_DATA = 'h'
+STRUCT_DATA = 'hhh'
 STRUCT_HEADER = 'Hh'
 
 # Exemplo: python storeBinData.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
@@ -128,7 +128,9 @@ def main(args):
             # Arquivo de log
             dataFile = open(args['FileName'],'a')
             dataFileBin = open(args['FileName']+'bin','ab')
-            dataFile.write(str(data[0])+"\n")
+            for i in range(0, len(data)):
+                dataFile.write(str(data[i])+"\t") 
+            dataFile.write("\n")
             dataFileBin.write(rawData)
             dataFile.close()
             dataFileBin.close()

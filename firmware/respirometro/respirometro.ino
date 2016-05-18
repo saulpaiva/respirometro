@@ -24,7 +24,7 @@ sobre a licença GPL v3, como também os arquivos:
     ENTRADAS ANALÓGICAS:
         A0 :: RESPIRÔMETRO PRIMEIRA ENTRADA
         A1 :: RESPIRÔMETRO SEGUNDA ENTRADA
-        A2 :: ELETROCARDIOGRAMA
+        A5 :: ELETROCARDIOGRAMA
 */
 
 #include "binaryCommunication.h"
@@ -32,7 +32,11 @@ sobre a licença GPL v3, como também os arquivos:
 
 /* Definindo a frequencia de operação do equipamento*/
 #define FREQUENCY 250  // Hz
- 
+
+#define CARDIO_PIN A5
+#define RESP_PIN_1 A0
+#define RESP_PIN_2 A1
+
 /* Criando estruturas de dados para definir como será enviado os 
     dados de comunicação*/
 struct{
@@ -42,7 +46,7 @@ struct{
 }headerStruct;
 
 struct{
-    short int reads[1];
+    short int reads[3];
 }dataStruct;
 
 /* Criando comunicação*/
@@ -63,8 +67,9 @@ void loop(){
 }
 
 void measures(){ 
-    for(int i = 0; i < 1; i++)
-        dataStruct.reads[i] = analogRead(i);    
+    dataStruct.reads[0] = analogRead(CARDIO_PIN);
+    dataStruct.reads[1] = analogRead(RESP_PIN_1);    
+    dataStruct.reads[2] = analogRead(RESP_PIN_2);
     /* Enviando dados*/
     commData.send();      
 }

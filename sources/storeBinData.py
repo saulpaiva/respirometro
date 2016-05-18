@@ -97,9 +97,7 @@ def main(args):
         except KeyboardInterrupt:
             sys.exit()
         except struct.error:
-            print("Problemas com comunicação. Por favor reenvie o firmware para\
-                    a placa")
-            sys.exit()
+            print("Leitura falhou. Reiniciando.")
         
     print("Frequência de operação é de {} Hz.".format(freq))
     scriptTime = int(freq*args['ExecTime'])
@@ -115,6 +113,7 @@ def main(args):
     dataFile.write("# Data do início da coleta: " + \
             now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]+"\n")
     dataFile.write("# Tempo estimado de coleta: {}s\n".format(args['ExecTime'])) 
+    dataFile.write("# A0\tA1\tA5\tTempo(s)\n")
     timeCounter = 0
     print("Iniciando aquisição de dados.")
     while (timeCounter <= scriptTime or scriptTime == 0):
@@ -129,8 +128,8 @@ def main(args):
             dataFile = open(args['FileName'],'a')
             dataFileBin = open(args['FileName']+'bin','ab')
             for i in range(0, len(data)):
-                dataFile.write(str(data[i])+"\t") 
-            dataFile.write("\n")
+                dataFile.write(str(data[i])+"\t")
+            dataFile.write(str(timeCounter/scriptTime*args['ExecTime'])+"\n")
             dataFileBin.write(rawData)
             dataFile.close()
             dataFileBin.close()

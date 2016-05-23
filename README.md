@@ -25,6 +25,35 @@ se encontra o arquivo para análise dos dados que foram salvas com a etapa anter
 códigos foram desenvolvidos usando *Python* e para seu funcionando é necessário ter instalado o 
 interpretador *Python*.
  
+### Usando o projeto
+
+#### Passo 1
+Primeiro passo a se realizar é instalar as dependências do projeto em sua máquina, caso utiliza
+um sistema operacional baseado em GNU/Linux esse trabalho foi reduzido. Supondo que você está
+em um ambiente Linux use o seguinte comando:
+
+Esse passo você irá realizar somente uma vez, como é necessário instalar pacotes e módulos python
+em seu computador será necessário a senha de administrador para essas operações.
+
+``` Unix
+make setup 
+```
+
+Após realizar este comando reinicie seu terminal e então realize o segundo passo.
+
+#### Passo 2
+Nessa parte será enviado o software para a placa microcontroladora para isso estamos usando
+o framework Platformio, lembrando que o firmware desenvolvido foi feito para microcontroladores
+ATMEL como suporte a wiring, como por exemplo Arduinos em geral.
+
+``` Unix
+make firmware
+```
+
+Ao entrar com esse comando irá se iniciar uma tela para seleção da placa que se está usando, além
+da porta usb em que ela está conectada ao computador. Na primeira vez que for enviar o firmaware para
+cada tipo de placa será necessário digiar _y_ no terminal para que o platformio instale as dependências
+para compilação de cada modelo de placa.
 
 ---
 Para demais informações e documentação completa visite

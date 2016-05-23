@@ -107,6 +107,8 @@ class FreqAnalysis(object):
         '''
         return {'Mean': mean(array), '' }
 
+    def derevative()
+
     @property
     def dataRate(self):
         return self._dataRate

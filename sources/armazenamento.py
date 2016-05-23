@@ -27,7 +27,7 @@
 STRUCT_DATA = 'hhh'
 STRUCT_HEADER = 'Hh'
 
-# Exemplo: python storeBinData.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
+# Exemplo: python3 armazenamento.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
 
 import sys, serial, datetime, os, time, struct
 
@@ -79,8 +79,8 @@ def progressBar(percent, lenght):
                     "\033[0;32m"+"\t{}%".format(percent)+"\033[0;0m" 
     print(printString, end='\r') 
 
-def main(args):
-    
+def main():
+    args = validateInput()    
     while True:
         try:
             comm = initSerial(args['SerialPort'], args['BaudRate'])
@@ -101,12 +101,12 @@ def main(args):
         
     print("Frequência de operação é de {} Hz.".format(freq))
     scriptTime = int(freq*args['ExecTime'])
-
+    period = 1.0/freq
     dataFile = open(args['FileName'],'w')
     dataFileBin = open(args['FileName']+'bin','wb')
 
     dataFile.write("# ----CTA||IF||UFRGS---- RESPIRÔMETRO LOGGER\n")
-    dataFile.write("# Frequencia de operação: "+str(freq)+"\n")
+    dataFile.write("# Frequência de operação: "+str(freq)+"\n")
     dataFileBin.write(struct.pack('h',freq)) 
     # Registra horário atual
     now = datetime.datetime.now()
@@ -117,7 +117,6 @@ def main(args):
     timeCounter = 0
     print("Iniciando aquisição de dados.")
     while (timeCounter <= scriptTime or scriptTime == 0):
-        timeCounter += 1
         if not(timeCounter % int(scriptTime/100)):
            progressBar(int(timeCounter*1.0/scriptTime*100), 40)
         try:
@@ -129,10 +128,12 @@ def main(args):
             dataFileBin = open(args['FileName']+'bin','ab')
             for i in range(0, len(data)):
                 dataFile.write(str(data[i])+"\t")
-            dataFile.write(str(timeCounter/scriptTime*args['ExecTime'])+"\n")
+            dataFile.write(str(format(timeCounter*period, '.5f'))+"\n")
             dataFileBin.write(rawData)
             dataFile.close()
             dataFileBin.close()
+
+            timeCounter += 1
 
         except KeyboardInterrupt:
             print("\nTecla de escape prescionada. Abortando")
@@ -145,6 +146,36 @@ def main(args):
     comm.close()
     print("\nOperação finalizada com sucesso.")
     
+def unpackDataResp(fileName, timeI, timeF):
+    fisiologfile = open(fileName)
+    yCard = []
+    yRespDir = []
+    yRespEsq = []
+    x = []
+    # Lendo HEADER
+    fisiologfile.readline()
+    frequency = fisiologfile.readline().replace('\n', '').split(' ')[4]
+    linha = fisiologfile.readline()
+    date_time_d = linha.split(' ')[6]
+    date_time_d = date_time_d.split('-')[2]+ '/' + date_time_d.split('-')[1]+ '/' + date_time_d.split('-')[0]
+    date_time_h = linha.replace('\n','').split(' ')[7]
+    fisiologfile.readline()
+    fisiologfile.readline()
+    # Dados
+    for i, linha in enumerate(fisiologfile):
+        time = float(linha.replace('\n', '').split('\t')[3])
+        if time >= timeI and time <= timeF:    	
+            yCard.append(int(linha.split('\t')[0]))
+            yRespDir.append(int(linha.split('\t')[1]))
+            yRespEsq.append(int(linha.split('\t')[2]))
+            x.append(time)
+    fisiologfile.close()
+    if(len(yCard) % 2 != 0):
+        del(yCard[-1])
+        del(yRespDir[-1])
+        del(yRespEsq[-1])
+        del(x[-1])
+    return {'Freq':frequency, 'Date':date_time_d, 'Hour':date_time_h, 'Cardiogram':yCard, 'RespDir':yRespDir, 'RespEsq':yRespEsq, 'Time': x}
+
 if __name__== '__main__':
-    args = validateInput()
-    main(args)
+    main()

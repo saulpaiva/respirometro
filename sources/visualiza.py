@@ -34,14 +34,13 @@
         divido por 2, ou seja, a as frequências definidas aqui devem estar no
         intervalo [0;freq/2]
 '''
-# Exemplo: python3 visualiza.py coleta_Nome_Exemplo_1min.log 0 60 2 4 0 7
+# Exemplo: python3 visualiza.py coleta_Nome_Exemplo_1min.log 0 60 2 4 0 1
 from array import *
 from scipy.fftpack import fft, fftfreq, fftshift
 import numpy as np
 from armazenamento import unpackDataResp
-import sys, os
+import sys, os, re, math
 import matplotlib.pyplot as plt
-import math
 
 # ERROS:
 # Testando se contém os argumentos
@@ -63,8 +62,8 @@ n_filtro = int(parametro[3])
 qtd_filtro = int(parametro[4])
 freq_i = float(parametro[5])
 freq_f = float(parametro[6])
-png_name = 'Resp_'+log_file.split('_')[1]+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str('%.2f' % freq_i)+'_a_'+str('%.2f' % freq_f)+'.png'
-user_name = parametro[0].replace('_', ' ').split(' ')[1] + ' ' + parametro[0].replace('_', ' ').split(' ')[2]
+png_name = 'Resp_'+str(log_file.split('/')[:-1])+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str('%.2f' % freq_i)+'_a_'+str('%.2f' % freq_f)+'.png'
+user_name = log_file
 
 # ERRO:
 # Ajustando para que os pontos iniciais não sejam maiores que os finais
@@ -88,7 +87,6 @@ freq = float(data['Freq'])
 N = len(data['Cardiogram'])
 T = 1.0/freq
 dx = float(freq)/N
-print('Freq '+str(freq)+' N '+str(N))
 
 # Inicialização de variáveis
 x1 = array('f', data['Time'])
@@ -374,6 +372,17 @@ plt.text(0.38,0.12,'Frequência       Período        Frequência       Período
 plt.text(0.42,0.06,'(Hz)                (s)                   (Hz)                (s)', fontsize=fontsize[4], fontstyle = 'italic')
 
 plt.subplots_adjust(left = 0.1 ,right = 0.9 ,bottom=0.1, top = 0.9 ,wspace = 0.3, hspace = 0.3)
-fig.savefig(png_name, dpi=400)
+
+aux_str = parametro[0]
+local_dir = ''
+while True:
+    reg_exp = re.search('\/', aux_str)
+    if reg_exp != None:
+        local_dir += aux_str[:reg_exp.start()]
+        aux_str = aux_str[reg_exp.end():]
+    else:
+        break
+local_dir += png_name
+fig.savefig(local_dir, dpi=400)
 #plt.show()
 

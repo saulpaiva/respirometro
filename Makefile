@@ -1,7 +1,4 @@
 PYBIN := python3
-VENVDIR := $(shell pwd)/.venv
-VENVPY := ${VENVDIR}/bin/python
-
 BUILDDIR := .build
 
 .PHONY: help setup firmware serial run 

@@ -28,7 +28,7 @@ STRUCT_DATA = 'hhh'
 STRUCT_HEADER = 'Hh'
 
 # Exemplo: python3 armazenamento.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
-
+from terminalcolors import cprint, cstring
 import sys, serial, datetime, os, time, struct
 
 def validateInput():
@@ -66,18 +66,19 @@ def initSerial(port, baud):
     ser.dtr = True  # Liga DTR novamente
     return ser
 
-def progressBar(percent, lenght):
+def progressBar(percent, lenght=15, description =""):
     '''
         Cursor necessita estar na linha onde está a barra de progresso.
         DOC dos ANSII caracters:
             http://ascii-table.com/ansi-escape-sequences.php
     '''
     highlight = " "*int((lenght-2)*percent*1.0/100)
-    notHighlight = " "*(lenght-2- len(highlight))
-    printString = "\t"+"\033[47m"+" "+"\033[42m"+"{}".format(highlight)+ \
+    notHighlight = " "*(lenght - len(highlight) - 2)
+    printString = "\t"+ cstring(" ", back = "White")+cstring("{}", back = "Green").format(highlight)+ \
                     "\033[0;0m"+"{}".format(notHighlight)+ "\033[47m"+" "\
                     "\033[0;32m"+"\t{}%".format(percent)+"\033[0;0m" 
-    print(printString, end='\r') 
+    print(printString, end='\r')
+    printS
 
 def main():
     args = validateInput()    
@@ -95,6 +96,7 @@ def main():
                 break
             print("Leitura falhou. Reiniciando.")
         except KeyboardInterrupt:
+            print("Tecla de escape prescionada. Abortando")
             sys.exit()
         except struct.error:
             print("Leitura falhou. Reiniciando.")
@@ -162,13 +164,22 @@ def unpackDataResp(fileName, timeI, timeF):
     fisiologfile.readline()
     fisiologfile.readline()
     # Dados
-    for i, linha in enumerate(fisiologfile):
-        time = float(linha.replace('\n', '').split('\t')[3])
-        if time >= timeI and time <= timeF:    	
-            yCard.append(int(linha.split('\t')[0]))
-            yRespDir.append(int(linha.split('\t')[1]))
-            yRespEsq.append(int(linha.split('\t')[2]))
-            x.append(time)
+    if(timeF == 0):
+        for i, linha in enumerate(fisiologfile):
+            time = float(linha.replace('\n', '').split('\t')[3])
+            if time >= timeI:    	
+                yCard.append(int(linha.split('\t')[0]))
+                yRespDir.append(int(linha.split('\t')[1]))
+                yRespEsq.append(int(linha.split('\t')[2]))
+                x.append(time)
+    else:
+        for i, linha in enumerate(fisiologfile):
+            time = float(linha.replace('\n', '').split('\t')[3])
+            if time >= timeI and time <= timeF:    	
+                yCard.append(int(linha.split('\t')[0]))
+                yRespDir.append(int(linha.split('\t')[1]))
+                yRespEsq.append(int(linha.split('\t')[2]))
+                x.append(time)
     fisiologfile.close()
     if(len(yCard) % 2 != 0):
         del(yCard[-1])

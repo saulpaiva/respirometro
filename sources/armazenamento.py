@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+
+import os, sys
+sys.path.append('{}respirometro{}scripts'.format(
+    os.path.dirname(os.path.realpath(__file__)).split('respirometro')[0],
+    os.path.sep))
+
 '''
  Respirômetro - Fisiolog CTA
 
@@ -28,8 +34,8 @@ STRUCT_DATA = 'hhh'
 STRUCT_HEADER = 'Hh'
 
 # Exemplo: python3 armazenamento.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
-from terminalcolors import cprint, cstring
-import sys, serial, datetime, os, time, struct
+from terminalcolors import colorprint, colorstring
+import serial, datetime, time, struct
 
 def validateInput():
     '''
@@ -74,11 +80,10 @@ def progressBar(percent, lenght=15, description =""):
     '''
     highlight = " "*int((lenght-2)*percent*1.0/100)
     notHighlight = " "*(lenght - len(highlight) - 2)
-    printString = "\t"+ cstring(" ", back = "White")+cstring("{}", back = "Green").format(highlight)+ \
+    printString = "\t"+ colorstring(" ", back = "White")+colorstring("{}", back = "Green").format(highlight)+ \
                     "\033[0;0m"+"{}".format(notHighlight)+ "\033[47m"+" "\
                     "\033[0;32m"+"\t{}%".format(percent)+"\033[0;0m" 
     print(printString, end='\r')
-    printS
 
 def main():
     args = validateInput()    

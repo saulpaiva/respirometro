@@ -1,5 +1,6 @@
 from terminalcolors import cstring, cprint
 import types
+
 class ProgBarTerm():
     default_color = 'NORMAL'
     complete_color = 'GREEN'
@@ -15,23 +16,20 @@ class ProgBarTerm():
     # Creating a dict with atributes of this class
     def __iter__(self):
         # first start by grabbing the Class items
-        iters = dict((x,y) for x,y in ProgBarTerm.__dict__.items() 
-                if not (x[:2] == '__' and type(y) == types.MethodType))
+        iters = {x:y for x,y in ProgBarTerm.__dict__.items() 
+                if not x.startswith('__') and type(y) != types.FunctionType}
 
-        this_dict = dict((x,y) for x,y in self.__dict__.items() 
-                if not (x[:2] == '__' and type(y) == types.MethodType))
         # then update the class items with the instance items
-        iters.update(this_dict)
+        iters.update(self.__dict__)
 
         # now 'yield' (Generator) through the items
         for x,y in iters.items():
-            if not(type(y) == types.MethodType):
-                yield x,y
+            yield x,y
 
-    def test(self):
-        print(dict(self.__dict__))
+    def printDict(self):
+        print(dict(self))
 
 if __name__ == '__main__':
     a = ProgBarTerm()
-    print(a.test())
-    print(dict(a))
+    a.printDict()
+    # print(dict(a))

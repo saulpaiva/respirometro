@@ -48,9 +48,9 @@ class TerminalColors:
             
         print(cls.cstring(string, attr, fore, back), end = end, sep = sep, flush = flush)
     
-def cprint(*args, **kwargs):
+def colorprint(*args, **kwargs):
     TerminalColors.cprint(*args, **kwargs)
-def cstring(*args, **kwargs):
+def colorstring(*args, **kwargs):
     return TerminalColors.cstring(*args, **kwargs)
 
 if __name__ == '__main__':

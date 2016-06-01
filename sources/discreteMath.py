@@ -28,6 +28,7 @@ def removeDC(dataPoints):
     try:
         dataPoints = dataPoints - sum(dataPoints)/len(dataPoints) 
     except ZeroDivisionError:
+        pass
     return dataPoints    
 
 def normalize(dataPoints):
@@ -38,7 +39,7 @@ def normalize(dataPoints):
     try:
         dataPoints = dataPoints/major
     except ZeroDivisionError:
-        
+        pass
     return dataPoints
 
 def integrate(dataPoints, dataRate = 1):
@@ -59,6 +60,7 @@ def statistics(*args, **kwargs):
             for i in range(0, len(dataPoints)):
                 var += dataPoints[i]
         except ZeroDivisionError:
+            pass
     else:
         domain = kwargs.get('domain', 0)
         image = kwargs.get('image', 0)
@@ -69,4 +71,4 @@ def statistics(*args, **kwargs):
             for i in range(0, len(domain)):
                 var += (domain[i]-avg)*image[i]
             var /= (domain[:-1] - domain[0])
-    return {'Mean':avg, 'Variance': }
+    return {'Mean':avg, 'Variance': var}

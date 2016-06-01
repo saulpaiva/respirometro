@@ -2,3 +2,4 @@ pyserial==3.0.1
 pythondialog==3.2.0
 scipy==0.17.1
 image==1.5.3
+matplotlib==1.5.1

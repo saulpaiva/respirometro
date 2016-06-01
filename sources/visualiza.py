@@ -62,8 +62,9 @@ n_filtro = int(parametro[3])
 qtd_filtro = int(parametro[4])
 freq_i = float(parametro[5])
 freq_f = float(parametro[6])
-png_name = 'Resp_'+str(log_file.split('/')[:-1])+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str('%.2f' % freq_i)+'_a_'+str('%.2f' % freq_f)+'.png'
-user_name = log_file
+file_name = log_file.split('/')[-1].strip('.log')
+user_name = '{}_{}_{}_{}.png'.format(file_name, t_inicial, t_final, freq_i , freq_f)
+out_path = '{}/{}'.format('/'.join(log_file.split('/')[:-1]), user_name)
 
 # ERRO:
 # Ajustando para que os pontos iniciais não sejam maiores que os finais
@@ -373,16 +374,6 @@ plt.text(0.42,0.06,'(Hz)                (s)                   (Hz)              
 
 plt.subplots_adjust(left = 0.1 ,right = 0.9 ,bottom=0.1, top = 0.9 ,wspace = 0.3, hspace = 0.3)
 
-aux_str = parametro[0]
-local_dir = ''
-while True:
-    reg_exp = re.search('\/', aux_str)
-    if reg_exp != None:
-        local_dir += aux_str[:reg_exp.start()]
-        aux_str = aux_str[reg_exp.end():]
-    else:
-        break
-local_dir += png_name
-fig.savefig(local_dir, dpi=400)
+fig.savefig(out_path, dpi=400)
 #plt.show()
 

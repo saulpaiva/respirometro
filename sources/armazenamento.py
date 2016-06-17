@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+
+import os, sys
+sys.path.append('{}respirometro{}scripts'.format(
+    os.path.dirname(os.path.realpath(__file__)).split('respirometro')[0],
+    os.path.sep))
+
 '''
  Respirômetro - Fisiolog CTA
 
@@ -28,8 +34,8 @@ STRUCT_DATA = 'hhh'
 STRUCT_HEADER = 'Hh'
 
 # Exemplo: python3 armazenamento.py /dev/ttyACM0 115200 coleta_Nome_Exemplo_1min.log 30
-from terminalcolors import cprint, cstring
-import sys, serial, datetime, os, time, struct
+from terminalcolors import colorprint, colorstring
+import serial, datetime, time, struct
 
 def validateInput():
     '''
@@ -74,11 +80,10 @@ def progressBar(percent, lenght=15, description =""):
     '''
     highlight = " "*int((lenght-2)*percent*1.0/100)
     notHighlight = " "*(lenght - len(highlight) - 2)
-    printString = "\t"+ cstring(" ", back = "White")+cstring("{}", back = "Green").format(highlight)+ \
+    printString = "\t"+ colorstring(" ", back = "White")+colorstring("{}", back = "Green").format(highlight)+ \
                     "\033[0;0m"+"{}".format(notHighlight)+ "\033[47m"+" "\
                     "\033[0;32m"+"\t{}%".format(percent)+"\033[0;0m" 
     print(printString, end='\r')
-    printS
 
 def main():
     args = validateInput()    
@@ -148,45 +153,47 @@ def main():
     comm.close()
     print("\nOperação finalizada com sucesso.")
     
-def unpackDataResp(fileName, timeI, timeF):
-    fisiologfile = open(fileName)
-    yCard = []
-    yRespDir = []
-    yRespEsq = []
-    x = []
+def unpackData(file_name):
+    log_file = open(file_name)
     # Lendo HEADER
-    fisiologfile.readline()
-    frequency = fisiologfile.readline().replace('\n', '').split(' ')[4]
-    linha = fisiologfile.readline()
+    log_file.readline()
+    frequency = log_file.readline().replace('\n', '').split(' ')[4]
+    linha = log_file.readline()
     date_time_d = linha.split(' ')[6]
     date_time_d = date_time_d.split('-')[2]+ '/' + date_time_d.split('-')[1]+ '/' + date_time_d.split('-')[0]
     date_time_h = linha.replace('\n','').split(' ')[7]
-    fisiologfile.readline()
-    fisiologfile.readline()
-    # Dados
-    if(timeF == 0):
-        for i, linha in enumerate(fisiologfile):
-            time = float(linha.replace('\n', '').split('\t')[3])
-            if time >= timeI:    	
-                yCard.append(int(linha.split('\t')[0]))
-                yRespDir.append(int(linha.split('\t')[1]))
-                yRespEsq.append(int(linha.split('\t')[2]))
-                x.append(time)
-    else:
-        for i, linha in enumerate(fisiologfile):
-            time = float(linha.replace('\n', '').split('\t')[3])
-            if time >= timeI and time <= timeF:    	
-                yCard.append(int(linha.split('\t')[0]))
-                yRespDir.append(int(linha.split('\t')[1]))
-                yRespEsq.append(int(linha.split('\t')[2]))
-                x.append(time)
-    fisiologfile.close()
-    if(len(yCard) % 2 != 0):
-        del(yCard[-1])
-        del(yRespDir[-1])
-        del(yRespEsq[-1])
-        del(x[-1])
-    return {'Freq':frequency, 'Date':date_time_d, 'Hour':date_time_h, 'Cardiogram':yCard, 'RespDir':yRespDir, 'RespEsq':yRespEsq, 'Time': x}
+    log_file.readline()
+    fields = log_file.readline().strip(' #(s)\n').split('\t')
+
+    data = {x:[] for x in fields}
+    for linha in log_file:
+        items = linha.replace('\n', '').split('\t')
+        for i, field in enumerate(fields):
+            data[field].append(float(items[i]))
+    log_file.close()
+
+    if(len(data[fields[0]]) % 2 != 0):
+        for item in data.values():
+            item.pop(-1)
+    
+    header = {'Freq':frequency, 'Date':date_time_d, 'Hour':date_time_h}
+    data.update(header)
+    return data
+
+def selectDataRange(data, key, t_in, t_fi):
+    if not key in data.keys():
+        return False
+
+    list_keys = [x for x in data.keys() if isinstance(data[x], list)]
+    out = {x:[] for x in data.keys() if x in list_keys}
+    out.update({x:y for (x,y) in zip(data.keys(), data.values()) if not x in list_keys})
+    for i, time in enumerate(data[key]):
+        if time >= t_in and time < t_fi:
+            for field in list_keys:
+                out[field].append(data[field][i])
+    return out
 
 if __name__== '__main__':
-    main()
+    # main()
+    a = unpackData('../logs/test.log')
+    b = selectDataRange(a, 'Tempo', 9.0, 9.5)

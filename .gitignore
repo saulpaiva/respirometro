@@ -2,5 +2,6 @@
 sources/python/
 sources/*.log
 sources/*.logbin
+logs/*
 __pycache__
 scripts/__pycache__

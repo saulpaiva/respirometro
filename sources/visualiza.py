@@ -38,7 +38,7 @@
 from array import *
 from scipy.fftpack import fft, fftfreq, fftshift
 import numpy as np
-from armazenamento import unpackDataResp
+from armazenamento import unpackData, selectDataRange
 import sys, os, re, math
 import matplotlib.pyplot as plt
 
@@ -55,15 +55,14 @@ if not os.path.exists(sys.argv[1]):
 # Atribuindo as váriaveis com os valores de entrada
 parametro = sys.argv[1:]
 log_file = parametro[0]
-fisiologfile = open(log_file,'r')
 t_inicial = int(parametro[1])
 t_final = int(parametro[2])
 n_filtro = int(parametro[3])
 qtd_filtro = int(parametro[4])
 freq_i = float(parametro[5])
 freq_f = float(parametro[6])
-png_name = 'Resp_'+str(log_file.split('/')[:-1])+'_'+str(t_inicial)+'_a_'+str(t_final)+'_'+str('%.2f' % freq_i)+'_a_'+str('%.2f' % freq_f)+'.png'
-user_name = log_file
+user_name = os.path.splitext(os.path.basename(log_file))[0]
+png_name = 'Resp_{}_{}s_{}s_{}hz_{}hz.png'.format(user_name, t_inicial, t_final, freq_i, freq_f)
 
 # ERRO:
 # Ajustando para que os pontos iniciais não sejam maiores que os finais
@@ -81,17 +80,18 @@ if t_inicial < 0 or t_final < 0:
 	sys.stderr.write('ERRO: Não possível operar com intervalos negativos.\nEm caso de dúvidas leia o READ_ME.md.\n')
 	sys.exit(1)
 
-data = unpackDataResp(log_file, t_inicial , t_final)
-
+data = unpackData(log_file)
 freq = float(data['Freq']) 
-N = len(data['Cardiogram'])
+N = len(data['A0'])
 T = 1.0/freq
 dx = float(freq)/N
 
+data = selectDataRange(data, 'Tempo', t_inicial, t_final)
+
 # Inicialização de variáveis
-x1 = array('f', data['Time'])
-y1 = array('f', data['RespDir'])
-y2 = array('f', data['RespEsq'])
+x1 = array('f', data['Tempo'])
+y1 = array('f', data['A0'])
+y2 = array('f', data['A1'])
 y1_filt = array('f', [])
 y2_filt = array('f', [])
 x_fft_plot = array('f', [])
@@ -382,7 +382,7 @@ while True:
         aux_str = aux_str[reg_exp.end():]
     else:
         break
-local_dir += png_name
+local_dir += '/' + png_name
 fig.savefig(local_dir, dpi=400)
 #plt.show()
 

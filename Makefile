@@ -12,8 +12,10 @@ help:
 	@ echo " firmware    Compile and upload the firmware to the Arduino board via serial"
 	@ echo " serial      Starts a serial session with Python for board communication"
 	@ echo ""
-	@ echo " store       Execute the logger on the foreground. Hit Ctrl+C to stop it."
-	@ echo " analyse     Execute the analyses data routine"
+	@ echo " run         Execute the storage and analysis scripts. It's like run 'make store'"
+	@ echo "                 and 'make anlyse'."
+	@ echo " store       Execute the storage data routine."
+	@ echo " analyze     Execute the analysis data routine."
 
 install-debian-deps:
 	sudo apt-get install -y python3 supervisor curl dialog
@@ -42,5 +44,10 @@ pyserial:
 	python3 -i scripts/init_serial.py
  
 run:
-	python3 logger/run.py
+	python3 scripts/coleta_script.py
 
+store:
+	python3 scripts/coleta_script.py --store
+
+analyze:
+	python3 scripts/coleta_script.py --analyze
